@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="author" content="Nicolas Euflauzino">
+
+    <meta name="description" content="Calculadora de custo estimado para galpões pré-moldados.">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calculadora de Galpão - FORTPRÉ</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #F2F2F2;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: auto;
+            background: #FFFFFF;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 8px solid #F4C430;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #000000;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #333333;
+        }
+
+        .resultado {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: #000000;
+        }
+
+        .aviso {
+            margin-top: 25px;
+            font-size: 14px;
+            background: #FFF7D6;
+            padding: 12px;
+            border-left: 4px solid #F4C430;
+            color: #333333;
+            border-radius: 6px;
+            line-height: 1.4;
+        }
+
+        #whatsapp-button {
+            display: none;
+            margin-top: 20px;
+            background: #25D366;
+            color: #fff;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #whatsapp-button:hover {
+            background: #128C7E;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Calculadora de custo Galpão <br> Pré-Moldado</h2>
+
+        <label>Digite a metragem (m²):</label>
+
+        <form onsubmit="calcular(); return false;">
+            <input type="text" id="metragem" inputmode="numeric" placeholder="Ex: 1.000 m²" required>
+        </form>
+
+        <button onclick="calcular()">Calcular</button>
+
+        <div class="resultado" id="resultado"></div>
+
+        <div class="aviso">
+            <strong>Aviso:</strong> O valor apresentado é uma estimativa inicial.
+            A simulação considera apenas a estrutura seca (pilares, vigas e cobertura),
+            sem incluir fechamentos laterais ou alvenaria.
+            Para um orçamento completo e definitivo, solicite uma proposta técnica.
+        </div>
+
+        <div id="whatsapp-button" onclick="irParaWhatsApp()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                style="width:24px; vertical-align:middle; margin-right:10px;">
+            Enviar para o WhatsApp
+        </div>
+    </div>
+
+    <script>
+        function parseBR(valor) {
+            if (!valor) return NaN;
+            valor = valor.replace(/\./g, '');
+            valor = valor.replace(',', '.');
+            return parseFloat(valor);
+        }
+
+        function calcular() {
+            const campo = document.getElementById("metragem");
+            let m2 = parseBR(campo.value);
+
+            if (isNaN(m2) || m2 < 100) {
+                document.getElementById("resultado").innerHTML =
+                    "❗Informe uma metragem válida (mínimo 100 m²).";
+                document.getElementById("whatsapp-button").style.display = "none";
+                return;
+            }
+
+            let preco;
+            if (m2 <= 500) preco = 900;
+            else if (m2 <= 1000) preco = 800;
+            else if (m2 <= 3000) preco = 700;
+            else preco = 600;
+
+            const total = m2 * preco;
+
+            document.getElementById("resultado").innerHTML =
+                `💰 Valor estimado: <strong>R$ ${total.toLocaleString('pt-BR')}</strong><br>
+             <span style="font-size:16px;">Valor por m²: R$ ${preco.toLocaleString('pt-BR')}</span>`;
+
+            document.getElementById("whatsapp-button").style.display = "block";
+        }
+
+        function irParaWhatsApp() {
+            const mensagem = "Olá, gostaria de continuar com o orçamento para galpão.";
+            window.open(
+                `https://wa.me/5511995618537?text=${encodeURIComponent(mensagem)}`,
+                "_blank"
+            );
+        }
+    </script>
+
+</body>
+
+</html>
